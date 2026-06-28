@@ -1,4 +1,13 @@
 import { useMemo } from 'react'
+import {
+  EffectComposer,
+  Bloom,
+  Vignette,
+  ChromaticAberration,
+  SMAA,
+} from '@react-three/postprocessing'
+import { BlendFunction, KernelSize } from 'postprocessing'
+import { Vector2 } from 'three'
 import { useGalaxyStore } from '@/store/useGalaxyStore'
 import { useVisibleNodes } from '@/hooks/useMemoryGraph'
 import { neighborsOf } from '@/lib/graphUtils'
@@ -8,6 +17,9 @@ import { GalaxyNode } from './GalaxyNode'
 import { WormholeLine } from './WormholeLine'
 import { AgentOrb } from './AgentOrb'
 import { CameraRig } from './CameraRig'
+
+/** Tiny, fixed chromatic-aberration offset for a subtle cinematic lens feel. */
+const CA_OFFSET = new Vector2(0.0006, 0.0006)
 
 /**
  * The full 3D scene graph: lights, starfield, nebula, relationship lanes,
@@ -107,6 +119,27 @@ export function GalaxyScene() {
       ))}
 
       <CameraRig />
+
+      {/* Cinematic post-processing: bloom makes every emissive object glow like
+          a real light source; subtle vignette + lens aberration sell the lens. */}
+      <EffectComposer multisampling={0}>
+        <Bloom
+          intensity={0.9}
+          luminanceThreshold={0.18}
+          luminanceSmoothing={0.7}
+          mipmapBlur
+          kernelSize={KernelSize.LARGE}
+          radius={0.7}
+        />
+        <ChromaticAberration
+          blendFunction={BlendFunction.NORMAL}
+          offset={CA_OFFSET}
+          radialModulation={false}
+          modulationOffset={0}
+        />
+        <Vignette eskil={false} offset={0.32} darkness={0.72} />
+        <SMAA />
+      </EffectComposer>
     </>
   )
 }

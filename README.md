@@ -61,9 +61,14 @@ local mock data today and Supabase-ready for tomorrow.
 
 ## Tech Stack
 
-- **Vite** + **React 18** + **TypeScript** (strict)
-- **React Three Fiber** + **Three.js** + **@react-three/drei** (Stars,
-  OrbitControls, Html, Line, Trail, useGLTF)
+- **Vite** + **React 19** + **TypeScript** (strict)
+- **React Three Fiber 9** + **Three.js 0.185** + **@react-three/drei 10**
+  (OrbitControls, Html, Line, Trail, useGLTF)
+- **@react-three/postprocessing** — cinematic pipeline: UnrealBloom,
+  SMAA, subtle chromatic aberration + vignette
+- **Custom GLSL shaders** — procedural plasma stars, atmospheric planets,
+  volumetric nebula, and twinkling parallax starfields (shared chunks in
+  `src/lib/three/shaderChunks.ts`)
 - **Zustand** — app state
 - **TanStack Query** — data-fetch boundary (mock today, Supabase-ready)
 - **Tailwind CSS** + shadcn/ui-style primitives
@@ -71,8 +76,10 @@ local mock data today and Supabase-ready for tomorrow.
 - **Zod** — schema validation
 - **Lucide React** — icons
 
-> The main galaxy objects are **real Three.js geometry, materials, particles,
-> and procedural effects** — no SVGs.
+> The main galaxy objects are **real Three.js geometry with custom GLSL
+> shaders, particles, and post-processed bloom** — stars are roiling plasma,
+> planets have procedural surfaces and atmospheres, and the nebula/starfield
+> are live shader point clouds. No SVGs, no sprites.
 
 ## Install
 
